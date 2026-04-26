@@ -9,38 +9,172 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardRedacaoRouteImport } from './routes/dashboard.redacao'
+import { Route as DashboardQuestoesRouteImport } from './routes/dashboard.questoes'
+import { Route as DashboardDesempenhoRouteImport } from './routes/dashboard.desempenho'
+import { Route as DashboardCronogramaRouteImport } from './routes/dashboard.cronograma'
+import { Route as DashboardConcursoRouteImport } from './routes/dashboard.concurso'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardRedacaoRoute = DashboardRedacaoRouteImport.update({
+  id: '/redacao',
+  path: '/redacao',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardQuestoesRoute = DashboardQuestoesRouteImport.update({
+  id: '/questoes',
+  path: '/questoes',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardDesempenhoRoute = DashboardDesempenhoRouteImport.update({
+  id: '/desempenho',
+  path: '/desempenho',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCronogramaRoute = DashboardCronogramaRouteImport.update({
+  id: '/cronograma',
+  path: '/cronograma',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardConcursoRoute = DashboardConcursoRouteImport.update({
+  id: '/concurso',
+  path: '/concurso',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/dashboard/concurso': typeof DashboardConcursoRoute
+  '/dashboard/cronograma': typeof DashboardCronogramaRoute
+  '/dashboard/desempenho': typeof DashboardDesempenhoRoute
+  '/dashboard/questoes': typeof DashboardQuestoesRoute
+  '/dashboard/redacao': typeof DashboardRedacaoRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/dashboard/concurso': typeof DashboardConcursoRoute
+  '/dashboard/cronograma': typeof DashboardCronogramaRoute
+  '/dashboard/desempenho': typeof DashboardDesempenhoRoute
+  '/dashboard/questoes': typeof DashboardQuestoesRoute
+  '/dashboard/redacao': typeof DashboardRedacaoRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/dashboard/concurso': typeof DashboardConcursoRoute
+  '/dashboard/cronograma': typeof DashboardCronogramaRoute
+  '/dashboard/desempenho': typeof DashboardDesempenhoRoute
+  '/dashboard/questoes': typeof DashboardQuestoesRoute
+  '/dashboard/redacao': typeof DashboardRedacaoRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/signup'
+    | '/dashboard/concurso'
+    | '/dashboard/cronograma'
+    | '/dashboard/desempenho'
+    | '/dashboard/questoes'
+    | '/dashboard/redacao'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/dashboard/concurso'
+    | '/dashboard/cronograma'
+    | '/dashboard/desempenho'
+    | '/dashboard/questoes'
+    | '/dashboard/redacao'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/signup'
+    | '/dashboard/concurso'
+    | '/dashboard/cronograma'
+    | '/dashboard/desempenho'
+    | '/dashboard/questoes'
+    | '/dashboard/redacao'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +182,78 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/redacao': {
+      id: '/dashboard/redacao'
+      path: '/redacao'
+      fullPath: '/dashboard/redacao'
+      preLoaderRoute: typeof DashboardRedacaoRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/questoes': {
+      id: '/dashboard/questoes'
+      path: '/questoes'
+      fullPath: '/dashboard/questoes'
+      preLoaderRoute: typeof DashboardQuestoesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/desempenho': {
+      id: '/dashboard/desempenho'
+      path: '/desempenho'
+      fullPath: '/dashboard/desempenho'
+      preLoaderRoute: typeof DashboardDesempenhoRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/cronograma': {
+      id: '/dashboard/cronograma'
+      path: '/cronograma'
+      fullPath: '/dashboard/cronograma'
+      preLoaderRoute: typeof DashboardCronogramaRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/concurso': {
+      id: '/dashboard/concurso'
+      path: '/concurso'
+      fullPath: '/dashboard/concurso'
+      preLoaderRoute: typeof DashboardConcursoRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardConcursoRoute: typeof DashboardConcursoRoute
+  DashboardCronogramaRoute: typeof DashboardCronogramaRoute
+  DashboardDesempenhoRoute: typeof DashboardDesempenhoRoute
+  DashboardQuestoesRoute: typeof DashboardQuestoesRoute
+  DashboardRedacaoRoute: typeof DashboardRedacaoRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardConcursoRoute: DashboardConcursoRoute,
+  DashboardCronogramaRoute: DashboardCronogramaRoute,
+  DashboardDesempenhoRoute: DashboardDesempenhoRoute,
+  DashboardQuestoesRoute: DashboardQuestoesRoute,
+  DashboardRedacaoRoute: DashboardRedacaoRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRouteWithChildren,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
