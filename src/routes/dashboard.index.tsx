@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Flame, Target, CalendarDays, HelpCircle, PenLine, BarChart3, ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
@@ -13,13 +15,32 @@ const shortcuts = [
 ] as const;
 
 function DashboardHome() {
+  const [userName, setUserName] = useState("Estudante");
+
+  useEffect(() => {
+    async function carregarUsuario() {
+      // Pega o usuário logado no momento
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        // Pega o nome completo do Google ou do cadastro manual
+        const nomeCompleto = user.user_metadata?.full_name || user.user_metadata?.name || "Estudante";
+        // Separa para pegar só o primeiro nome
+        const primeiroNome = nomeCompleto.split(" ")[0];
+        setUserName(primeiroNome);
+      }
+    }
+    
+    carregarUsuario();
+  }, []);
+
   return (
     <div className="p-6 lg:p-12 max-w-6xl mx-auto">
       {/* Welcome */}
       <div className="bg-primary text-primary-foreground rounded-3xl p-8 lg:p-10 relative overflow-hidden">
         <div className="absolute top-0 right-0 size-[400px] bg-success/30 blur-[120px] rounded-full" />
         <div className="relative">
-          <p className="text-sm text-primary-foreground/70">Olá, Maria 👋</p>
+          <p className="text-sm text-primary-foreground/70">Olá, {userName} 👋</p>
           <h1 className="font-display text-3xl lg:text-4xl font-semibold mt-2 tracking-tight">
             Você tem <span className="text-success">187 dias</span> até a sua prova.
           </h1>
@@ -54,58 +75,4 @@ function DashboardHome() {
           <div className="text-sm text-muted-foreground">Questões hoje</div>
           <div className="mt-2 font-display text-3xl font-semibold text-primary">42 / 60</div>
           <div className="mt-3 h-1.5 bg-muted rounded-full overflow-hidden">
-            <div className="h-full bg-success w-[70%]" />
-          </div>
-        </div>
-        <div className="bg-card border border-border/60 rounded-2xl p-6">
-          <div className="text-sm text-muted-foreground">Taxa de acerto</div>
-          <div className="mt-2 font-display text-3xl font-semibold text-success">74%</div>
-          <p className="text-xs text-muted-foreground mt-1">+6% essa semana</p>
-        </div>
-      </div>
-
-      {/* Shortcuts */}
-      <h2 className="font-display text-xl font-semibold text-primary mt-12 mb-4">Atalhos</h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {shortcuts.map((s) => {
-          const Icon = s.icon;
-          return (
-            <Link
-              key={s.to}
-              to={s.to}
-              className="group bg-card border border-border/60 rounded-2xl p-6 hover:border-success/40 hover:shadow-md transition-all"
-            >
-              <div className={`size-10 rounded-xl ${s.color} flex items-center justify-center mb-4`}>
-                <Icon className="size-5" />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="font-display font-semibold text-primary">{s.label}</span>
-                <ArrowRight className="size-4 text-muted-foreground group-hover:text-success group-hover:translate-x-1 transition-all" />
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* Recommendation */}
-      <div className="mt-8 bg-warmth/40 border border-amber-200 rounded-2xl p-6 flex flex-col sm:flex-row gap-4 items-start">
-        <div className="size-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
-          <BarChart3 className="size-5 text-amber-700" />
-        </div>
-        <div className="flex-1">
-          <h3 className="font-display font-semibold text-primary">Recomendação da IA</h3>
-          <p className="text-sm text-foreground/80 mt-1">
-            Seu desempenho em <strong>Direito Administrativo</strong> caiu 12% nas últimas 2 semanas.
-            Sugerimos 1h focada amanhã.
-          </p>
-        </div>
-        <Link
-          to="/dashboard/cronograma"
-          className="inline-flex items-center justify-center h-10 px-5 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90"
-        >
-          Ver plano
-        </Link>
-      </div>
-    </div>
-  );
-}
+            <div className
