@@ -39,4 +39,174 @@ function SignupPage() {
       return;
     }
     setLoading(true);
-    setError
+    setError("");
+
+    const { error } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: {
+        data: { full_name: form.name },
+      },
+    });
+
+    if (error) {
+      setError(error.message === "User already registered"
+        ? "Este email já está cadastrado. Faça login."
+        : "Erro ao criar conta. Tente novamente.");
+      setLoading(false);
+    } else {
+      setSuccess(true);
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    setGoogleLoading(true);
+    setError("");
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+
+    if (error) {
+      setError("Erro ao entrar com Google. Tente novamente.");
+      setGoogleLoading(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <div className="min-h-dvh flex items-center justify-center bg-background px-6 py-12">
+        <div className="w-full max-w-md text-center">
+          <div className="size-16 rounded-2xl bg-success/10 mx-auto flex items-center justify-center mb-6">
+            <span className="text-3xl">📬</span>
+          </div>
+          <h1 className="font-display text-2xl font-semibold text-primary">Verifique seu email!</h1>
+          <p className="mt-3 text-muted-foreground">
+            Enviamos um link de confirmação para <strong>{form.email}</strong>.
+            Clique no link para ativar sua conta.
+          </p>
+          <Link
+            to="/login"
+            className="mt-8 inline-flex items-center gap-2 h-12 px-6 rounded-full bg-success text-success-foreground font-medium hover:bg-success/90"
+          >
+            Ir para o login
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-dvh grid lg:grid-cols-2 bg-background">
+      <div className="flex flex-col px-6 sm:px-12 lg:px-16 py-10">
+        <Link to="/" className="flex items-center gap-2 mb-12">
+          <div className="size-7 rounded-lg bg-primary flex items-center justify-center">
+            <span className="text-primary-foreground font-display font-semibold text-sm">A</span>
+          </div>
+          <span className="font-display font-semibold text-primary text-xl">AprovadoIA</span>
+        </Link>
+
+        <div className="max-w-md w-full mx-auto flex-1 flex flex-col justify-center">
+          <h1 className="font-display text-3xl lg:text-4xl font-semibold text-primary tracking-tight">
+            Crie sua conta grátis
+          </h1>
+          <p className="mt-3 text-muted-foreground">
+            Em 30 segundos você recebe seu primeiro cronograma.
+          </p>
+
+          <button
+            type="button"
+            onClick={handleGoogleSignup}
+            disabled={googleLoading}
+            className="mt-8 inline-flex items-center justify-center gap-3 h-12 rounded-full border border-border bg-card hover:bg-muted transition-colors text-sm font-medium text-foreground disabled:opacity-60"
+          >
+            {googleLoading ? <Loader2 className="size-4 animate-spin" /> : <GoogleIcon />}
+            Continuar com Google
+          </button>
+
+          <div className="my-7 flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="flex-1 h-px bg-border" />
+            ou com email
+            <div className="flex-1 h-px bg-border" />
+          </div>
+
+          <form onSubmit={handleSignup} className="space-y-4">
+            {error && (
+              <div className="text-sm text-destructive bg-destructive/10 px-4 py-3 rounded-xl">
+                {error}
+              </div>
+            )}
+            <div>
+              <label className="text-xs font-medium text-primary uppercase tracking-wider">Nome completo</label>
+              <input
+                required
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="mt-2 w-full h-12 rounded-xl border border-input bg-card px-4 text-sm focus:outline-none focus:ring-2 focus:ring-success/40"
+                placeholder="Maria Silva"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-primary uppercase tracking-wider">Email</label>
+              <input
+                required
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="mt-2 w-full h-12 rounded-xl border border-input bg-card px-4 text-sm focus:outline-none focus:ring-2 focus:ring-success/40"
+                placeholder="voce@email.com"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-primary uppercase tracking-wider">Senha</label>
+              <input
+                required
+                type="password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className="mt-2 w-full h-12 rounded-xl border border-input bg-card px-4 text-sm focus:outline-none focus:ring-2 focus:ring-success/40"
+                placeholder="Mínimo 8 caracteres"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full inline-flex items-center justify-center gap-2 h-14 rounded-full bg-success text-success-foreground font-medium hover:bg-success/90 transition-colors shadow-soft disabled:opacity-60"
+            >
+              {loading ? <Loader2 className="size-4 animate-spin" /> : <ArrowRight className="size-4" />}
+              Criar conta grátis
+            </button>
+          </form>
+
+          <p className="mt-6 text-sm text-muted-foreground text-center">
+            Já tem conta?{" "}
+            <Link to="/login" className="text-primary font-medium hover:underline">
+              Entrar
+            </Link>
+          </p>
+        </div>
+      </div>
+
+      <div className="hidden lg:flex relative bg-primary text-primary-foreground items-center justify-center p-16 overflow-hidden">
+        <div className="absolute top-0 right-0 size-[500px] bg-success/20 blur-[120px] rounded-full" />
+        <div className="relative max-w-md">
+          <div className="text-xs font-semibold uppercase tracking-widest text-success mb-6">✦ Acesso instantâneo</div>
+          <h2 className="font-display text-4xl font-semibold leading-tight">
+            "A IA me deu clareza do que estudar todo dia. Aprovada em 8 meses."
+          </h2>
+          <div className="mt-8 flex items-center gap-3">
+            <div className="size-12 rounded-full bg-success-soft" />
+            <div>
+              <div className="font-medium">Mariana Costa</div>
+              <div className="text-sm text-primary-foreground/70">Receita Federal 2024</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
