@@ -10,14 +10,16 @@ import {
   Flame,
 } from "lucide-react";
 
-const items = [
+type Item = { to: string; label: string; icon: typeof Home; exact?: boolean };
+
+const items: Item[] = [
   { to: "/dashboard", label: "Início", icon: Home, exact: true },
   { to: "/dashboard/concurso", label: "Meu Concurso", icon: Target },
   { to: "/dashboard/cronograma", label: "Cronograma", icon: CalendarDays },
   { to: "/dashboard/questoes", label: "Questões", icon: HelpCircle },
   { to: "/dashboard/redacao", label: "Redação", icon: PenLine },
   { to: "/dashboard/desempenho", label: "Desempenho", icon: BarChart3 },
-] as const;
+];
 
 export function DashboardSidebar() {
   const location = useLocation();
