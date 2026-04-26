@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
   Home,
   Target,
@@ -9,6 +9,7 @@ import {
   LogOut,
   Flame,
 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 type Item = { to: string; label: string; icon: typeof Home; exact?: boolean };
 
@@ -24,6 +25,12 @@ const items: Item[] = [
 export function DashboardSidebar() {
   const location = useLocation();
   const path = location.pathname;
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: "/" });
+  };
 
   return (
     <aside className="hidden lg:flex flex-col w-64 border-r border-border/60 bg-sidebar p-6 sticky top-0 h-dvh">
@@ -66,13 +73,13 @@ export function DashboardSidebar() {
         <p className="mt-2 text-xs text-muted-foreground">Mantenha sua sequência!</p>
       </div>
 
-      <Link
-        to="/"
-        className="mt-4 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-muted-foreground hover:text-primary hover:bg-muted"
+      <button
+        onClick={handleLogout}
+        className="mt-4 w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
       >
         <LogOut className="size-4" />
         Sair
-      </Link>
+      </button>
     </aside>
   );
 }
