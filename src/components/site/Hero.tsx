@@ -26,10 +26,6 @@ export function Hero() {
             Quero meu plano de estudos grátis
             <ArrowRight className="size-4" />
           </Link>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-primary">Sem cartão de crédito.</span>
-            <span className="text-xs text-muted-foreground">Cancele quando quiser.</span>
-          </div>
         </div>
 
         <div className="mt-12 flex items-center gap-4">
