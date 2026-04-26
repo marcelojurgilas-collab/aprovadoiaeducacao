@@ -30,7 +30,6 @@ function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,8 +54,8 @@ function SignupPage() {
         : "Erro ao criar conta. Tente novamente.");
       setLoading(false);
     } else {
-      setSuccess(true);
-      setLoading(false);
+      // Como a confirmação de e-mail está desligada, a conta é criada e já faz o login automático!
+      navigate({ to: "/dashboard" });
     }
   };
 
@@ -76,29 +75,6 @@ function SignupPage() {
       setGoogleLoading(false);
     }
   };
-
-  if (success) {
-    return (
-      <div className="min-h-dvh flex items-center justify-center bg-background px-6 py-12">
-        <div className="w-full max-w-md text-center">
-          <div className="size-16 rounded-2xl bg-success/10 mx-auto flex items-center justify-center mb-6">
-            <span className="text-3xl">📬</span>
-          </div>
-          <h1 className="font-display text-2xl font-semibold text-primary">Verifique seu email!</h1>
-          <p className="mt-3 text-muted-foreground">
-            Enviamos um link de confirmação para <strong>{form.email}</strong>.
-            Clique no link para ativar sua conta.
-          </p>
-          <Link
-            to="/login"
-            className="mt-8 inline-flex items-center gap-2 h-12 px-6 rounded-full bg-success text-success-foreground font-medium hover:bg-success/90"
-          >
-            Ir para o login
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-dvh grid lg:grid-cols-2 bg-background">
