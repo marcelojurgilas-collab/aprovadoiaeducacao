@@ -45,6 +45,7 @@ function LoginPage() {
       setError("Email ou senha incorretos. Tente novamente.");
       setLoading(false);
     } else {
+      setLoading(false);
       navigate({ to: "/dashboard" });
     }
   };
