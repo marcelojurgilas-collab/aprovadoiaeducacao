@@ -44,6 +44,12 @@ export const Route = createRootRoute({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "AprovadoIA — Estude menos, aprove mais" },
+      { name: "description", content: "AprovadoIA is an AI-powered tutor for Brazilian public exam candidates." },
+      { property: "og:description", content: "AprovadoIA is an AI-powered tutor for Brazilian public exam candidates." },
+      { name: "twitter:description", content: "AprovadoIA is an AI-powered tutor for Brazilian public exam candidates." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f38b1d11-780a-4c3a-8863-548e54c645a0/id-preview-982ddab5--34272186-9cb1-4b5b-8336-7eaaaae2a18a.lovable.app-1777232276943.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f38b1d11-780a-4c3a-8863-548e54c645a0/id-preview-982ddab5--34272186-9cb1-4b5b-8336-7eaaaae2a18a.lovable.app-1777232276943.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
