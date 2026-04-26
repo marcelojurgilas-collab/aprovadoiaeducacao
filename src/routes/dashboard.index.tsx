@@ -19,24 +19,18 @@ function DashboardHome() {
 
   useEffect(() => {
     async function carregarUsuario() {
-      // Pega o usuário logado no momento
       const { data: { user } } = await supabase.auth.getUser();
-      
       if (user) {
-        // Pega o nome completo do Google ou do cadastro manual
         const nomeCompleto = user.user_metadata?.full_name || user.user_metadata?.name || "Estudante";
-        // Separa para pegar só o primeiro nome
         const primeiroNome = nomeCompleto.split(" ")[0];
         setUserName(primeiroNome);
       }
     }
-    
     carregarUsuario();
   }, []);
 
   return (
     <div className="p-6 lg:p-12 max-w-6xl mx-auto">
-      {/* Welcome */}
       <div className="bg-primary text-primary-foreground rounded-3xl p-8 lg:p-10 relative overflow-hidden">
         <div className="absolute top-0 right-0 size-[400px] bg-success/30 blur-[120px] rounded-full" />
         <div className="relative">
@@ -47,7 +41,6 @@ function DashboardHome() {
           <p className="mt-3 text-primary-foreground/80 max-w-xl">
             Receita Federal — Auditor Fiscal. Você está no caminho certo.
           </p>
-
           <div className="mt-8">
             <div className="flex justify-between text-xs mb-2">
               <span className="text-primary-foreground/70 uppercase tracking-wider font-medium">
@@ -62,7 +55,6 @@ function DashboardHome() {
         </div>
       </div>
 
-      {/* Cards row */}
       <div className="grid sm:grid-cols-3 gap-4 mt-6">
         <div className="bg-card border border-border/60 rounded-2xl p-6">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -75,4 +67,35 @@ function DashboardHome() {
           <div className="text-sm text-muted-foreground">Questões hoje</div>
           <div className="mt-2 font-display text-3xl font-semibold text-primary">42 / 60</div>
           <div className="mt-3 h-1.5 bg-muted rounded-full overflow-hidden">
-            <div className
+            <div className="h-full bg-success w-[70%] rounded-full" />
+          </div>
+        </div>
+        <div className="bg-card border border-border/60 rounded-2xl p-6">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <BarChart3 className="size-4 text-primary" /> Desempenho
+          </div>
+          <div className="mt-2 font-display text-3xl font-semibold text-primary">78%</div>
+          <p className="text-xs text-muted-foreground mt-1">Acertos na semana</p>
+        </div>
+      </div>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+        {shortcuts.map(({ to, label, icon: Icon, color }) => (
+          <Link
+            key={to}
+            to={to}
+            className="bg-card border border-border/60 rounded-2xl p-5 flex items-center justify-between group hover:border-success/40 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className={`size-9 rounded-xl flex items-center justify-center ${color}`}>
+                <Icon className="size-4" />
+              </div>
+              <span className="text-sm font-medium text-primary">{label}</span>
+            </div>
+            <ArrowRight className="size-4 text-muted-foreground group-hover:text-success transition-colors" />
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
