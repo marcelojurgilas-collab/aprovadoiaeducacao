@@ -9,13 +9,6 @@ export function Hero() {
   return (
     <section className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-12 pb-24 lg:pt-20 lg:pb-32 grid lg:grid-cols-[1.1fr_1fr] gap-16 lg:gap-24 items-center">
       <div className="flex flex-col items-start">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border/60 shadow-sm mb-8">
-          <div className="size-2 rounded-full bg-success animate-pulse" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">
-            Vagas abertas para mentoria
-          </span>
-        </div>
-
         <h1 className="font-display text-5xl lg:text-[4rem] leading-[1.05] font-semibold tracking-tight text-primary text-balance">
           Seu tutor de concursos com Inteligência Artificial.
         </h1>
