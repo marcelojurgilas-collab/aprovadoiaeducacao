@@ -48,6 +48,7 @@ function SignupPage() {
     }
     setLoading(true);
     setError("");
+    setSuccessMessage("");
 
     const { data, error } = await supabase.auth.signUp({
       email: form.email,
@@ -66,7 +67,7 @@ function SignupPage() {
     } else if (data.session) {
       navigate({ to: "/dashboard" });
     } else {
-      setError("O Supabase ainda está exigindo confirmação de email. Desative Confirm email nas configurações de Auth para entrar direto após o cadastro.");
+      setSuccessMessage(`Conta criada! Enviamos um link de confirmação para ${form.email}. Abra seu email e clique no link para acessar o dashboard.`);
       setLoading(false);
     }
   };
