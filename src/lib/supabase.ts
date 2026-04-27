@@ -50,4 +50,34 @@ export async function signInWithGooglePopup() {
   }
 
   popup.focus();
+
+  await new Promise<void>((resolve, reject) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        cleanup();
+        popup.close();
+        resolve();
+      }
+    });
+
+    const popupWatcher = window.setInterval(() => {
+      if (popup.closed) {
+        cleanup();
+        reject(new Error("Popup fechado antes da conclusão do login."));
+      }
+    }, 500);
+
+    const timeout = window.setTimeout(() => {
+      cleanup();
+      reject(new Error("Tempo esgotado ao aguardar autenticação com Google."));
+    }, 120000);
+
+    function cleanup() {
+      subscription.unsubscribe();
+      window.clearInterval(popupWatcher);
+      window.clearTimeout(timeout);
+    }
+  });
 }
