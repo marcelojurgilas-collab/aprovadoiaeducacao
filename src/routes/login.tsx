@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from "react";
+import { signInWithGooglePopup, supabase } from "@/lib/supabase";
 import { Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -26,10 +27,17 @@ function GoogleIcon() {
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate({ to: "/dashboard" });
+    }
+  }, [authLoading, user, navigate]);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,14 +62,9 @@ function LoginPage() {
     setGoogleLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`,
-      },
-    });
-
-    if (error) {
+    try {
+      await signInWithGooglePopup();
+    } catch (_error) {
       setError("Erro ao entrar com Google. Tente novamente.");
       setGoogleLoading(false);
     }
