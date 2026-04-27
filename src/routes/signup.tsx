@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { AUTH_REDIRECT_URL, signInWithGooglePopup, supabase } from "@/lib/supabase";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({
@@ -26,11 +27,17 @@ function GoogleIcon() {
 
 function SignupPage() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate({ to: "/dashboard" });
+    }
+  }, [authLoading, user, navigate]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,14 +47,13 @@ function SignupPage() {
     }
     setLoading(true);
     setError("");
-    setSuccess("");
 
     const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
         data: { full_name: form.name },
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: AUTH_REDIRECT_URL,
       },
     });
 
@@ -57,11 +63,9 @@ function SignupPage() {
         : "Erro ao criar conta. Tente novamente.");
       setLoading(false);
     } else if (data.session) {
-      // Confirmação de email desligada — login automático
       navigate({ to: "/dashboard" });
     } else {
-      // Confirmação de email ativada
-      setSuccess("Conta criada! Confira seu email para confirmar o cadastro antes de entrar.");
+      setError("O Supabase ainda está exigindo confirmação de email. Desative Confirm email nas configurações de Auth para entrar direto após o cadastro.");
       setLoading(false);
     }
   };
@@ -70,14 +74,9 @@ function SignupPage() {
     setGoogleLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`,
-      },
-    });
-
-    if (error) {
+    try {
+      await signInWithGooglePopup();
+    } catch (_error) {
       setError("Erro ao entrar com Google. Tente novamente.");
       setGoogleLoading(false);
     }
@@ -121,11 +120,6 @@ function SignupPage() {
             {error && (
               <div className="text-sm text-destructive bg-destructive/10 px-4 py-3 rounded-xl">
                 {error}
-              </div>
-            )}
-            {success && (
-              <div className="text-sm text-success bg-success/10 px-4 py-3 rounded-xl">
-                {success}
               </div>
             )}
             <div>
