@@ -30,6 +30,7 @@ function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,12 +40,14 @@ function SignupPage() {
     }
     setLoading(true);
     setError("");
+    setSuccess("");
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
         data: { full_name: form.name },
+        emailRedirectTo: `${window.location.origin}/dashboard`,
       },
     });
 
@@ -53,9 +56,13 @@ function SignupPage() {
         ? "Este email já está cadastrado. Faça login."
         : "Erro ao criar conta. Tente novamente.");
       setLoading(false);
-    } else {
-      // Como a confirmação de e-mail está desligada, a conta é criada e já faz o login automático!
+    } else if (data.session) {
+      // Confirmação de email desligada — login automático
       navigate({ to: "/dashboard" });
+    } else {
+      // Confirmação de email ativada
+      setSuccess("Conta criada! Confira seu email para confirmar o cadastro antes de entrar.");
+      setLoading(false);
     }
   };
 
@@ -114,6 +121,11 @@ function SignupPage() {
             {error && (
               <div className="text-sm text-destructive bg-destructive/10 px-4 py-3 rounded-xl">
                 {error}
+              </div>
+            )}
+            {success && (
+              <div className="text-sm text-success bg-success/10 px-4 py-3 rounded-xl">
+                {success}
               </div>
             )}
             <div>
