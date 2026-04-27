@@ -44,18 +44,66 @@ function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({
+    // 1) Tenta login
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email: form.email,
       password: form.password,
     });
 
-    if (error) {
-      setError("Email ou senha incorretos. Tente novamente.");
-      setLoading(false);
-    } else {
+    if (!signInError && signInData.session) {
       setLoading(false);
       navigate({ to: "/dashboard" });
+      return;
     }
+
+    const msg = signInError?.message?.toLowerCase() ?? "";
+    const isInvalidCreds =
+      msg.includes("invalid login credentials") ||
+      msg.includes("invalid credentials") ||
+      msg.includes("user not found");
+
+    // 2) Se credenciais inválidas, tenta cadastrar
+    if (isInvalidCreds) {
+      if (form.password.length < 6) {
+        setError("Senha muito curta. Use pelo menos 6 caracteres para criar sua conta.");
+        setLoading(false);
+        return;
+      }
+
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: form.email,
+        password: form.password,
+      });
+
+      if (signUpError) {
+        setError(
+          signUpError.message.toLowerCase().includes("already")
+            ? "Email já cadastrado, mas a senha está incorreta."
+            : "Não foi possível criar sua conta. Verifique o email e tente novamente."
+        );
+        setLoading(false);
+        return;
+      }
+
+      if (signUpData.session) {
+        setLoading(false);
+        navigate({ to: "/dashboard" });
+        return;
+      }
+
+      setError(
+        "Conta criada, mas o Supabase está exigindo confirmação de email. Desative 'Confirm email' em Authentication → Providers → Email para entrar direto."
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (msg.includes("email not confirmed")) {
+      setError("Seu email ainda não foi confirmado. Desative 'Confirm email' no Supabase ou confirme pelo link enviado.");
+    } else {
+      setError("Não foi possível entrar. Verifique email e senha e tente novamente.");
+    }
+    setLoading(false);
   };
 
   const handleGoogleLogin = async () => {
