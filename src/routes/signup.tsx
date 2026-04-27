@@ -32,6 +32,7 @@ function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -47,6 +48,7 @@ function SignupPage() {
     }
     setLoading(true);
     setError("");
+    setSuccessMessage("");
 
     const { data, error } = await supabase.auth.signUp({
       email: form.email,
@@ -65,7 +67,7 @@ function SignupPage() {
     } else if (data.session) {
       navigate({ to: "/dashboard" });
     } else {
-      setError("O Supabase ainda está exigindo confirmação de email. Desative Confirm email nas configurações de Auth para entrar direto após o cadastro.");
+      setSuccessMessage(`Conta criada! Enviamos um link de confirmação para ${form.email}. Abra seu email e clique no link para acessar o dashboard.`);
       setLoading(false);
     }
   };
@@ -117,6 +119,11 @@ function SignupPage() {
           </div>
 
           <form onSubmit={handleSignup} className="space-y-4">
+            {successMessage && (
+              <div className="text-sm text-success bg-success/10 px-4 py-3 rounded-xl">
+                {successMessage}
+              </div>
+            )}
             {error && (
               <div className="text-sm text-destructive bg-destructive/10 px-4 py-3 rounded-xl">
                 {error}
