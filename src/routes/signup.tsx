@@ -119,6 +119,11 @@ function SignupPage() {
           </div>
 
           <form onSubmit={handleSignup} className="space-y-4">
+            {successMessage && (
+              <div className="text-sm text-success bg-success/10 px-4 py-3 rounded-xl">
+                {successMessage}
+              </div>
+            )}
             {error && (
               <div className="text-sm text-destructive bg-destructive/10 px-4 py-3 rounded-xl">
                 {error}
