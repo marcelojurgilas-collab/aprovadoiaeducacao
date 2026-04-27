@@ -123,6 +123,11 @@ function SignupPage() {
                 {error}
               </div>
             )}
+            {success && (
+              <div className="text-sm text-success bg-success/10 px-4 py-3 rounded-xl">
+                {success}
+              </div>
+            )}
             <div>
               <label className="text-xs font-medium text-primary uppercase tracking-wider">Nome completo</label>
               <input
