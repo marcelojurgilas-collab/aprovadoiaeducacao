@@ -73,7 +73,7 @@ const TOOL = {
   },
 };
 
-export const Route = createFileRoute("/api/generate-plan")({
+export const Route = (createFileRoute("/api/generate-plan") as unknown as (opts: unknown) => unknown)({
   server: {
     handlers: {
       POST: async ({ request }: { request: Request }) => {
