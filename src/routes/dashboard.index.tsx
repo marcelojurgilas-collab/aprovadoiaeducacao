@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Flame, Target, CalendarDays, HelpCircle, PenLine, BarChart3, ArrowRight } from "lucide-react";
+import { Flame, Target, CalendarDays, HelpCircle, PenLine, BarChart3, ArrowRight, Upload } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -8,10 +8,10 @@ export const Route = createFileRoute("/dashboard/")({
 });
 
 const shortcuts = [
+  { to: "/dashboard/enviar-edital", label: "Enviar edital", icon: Upload, color: "bg-success-soft text-success" },
   { to: "/dashboard/concurso", label: "Meu Concurso", icon: Target, color: "bg-blue-100 text-blue-700" },
-  { to: "/dashboard/cronograma", label: "Cronograma", icon: CalendarDays, color: "bg-success-soft text-success" },
-  { to: "/dashboard/questoes", label: "Questões", icon: HelpCircle, color: "bg-amber-100 text-amber-700" },
-  { to: "/dashboard/redacao", label: "Redação", icon: PenLine, color: "bg-rose-100 text-rose-700" },
+  { to: "/dashboard/cronograma", label: "Cronograma", icon: CalendarDays, color: "bg-amber-100 text-amber-700" },
+  { to: "/dashboard/questoes", label: "Questões", icon: HelpCircle, color: "bg-rose-100 text-rose-700" },
 ] as const;
 
 function DashboardHome() {
