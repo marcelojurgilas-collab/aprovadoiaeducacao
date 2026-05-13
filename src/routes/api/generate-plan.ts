@@ -73,8 +73,8 @@ const TOOL = {
   },
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const Route = createFileRoute("/api/generate-plan")({} as any).update({
+const routeFactory = createFileRoute("/api/generate-plan") as unknown as (opts: unknown) => unknown;
+export const Route = routeFactory({
   server: {
     handlers: {
       POST: async ({ request }: { request: Request }) => {
