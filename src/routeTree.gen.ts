@@ -16,9 +16,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardRedacaoRouteImport } from './routes/dashboard.redacao'
 import { Route as DashboardQuestoesRouteImport } from './routes/dashboard.questoes'
+import { Route as DashboardEnviarEditalRouteImport } from './routes/dashboard.enviar-edital'
 import { Route as DashboardDesempenhoRouteImport } from './routes/dashboard.desempenho'
 import { Route as DashboardCronogramaRouteImport } from './routes/dashboard.cronograma'
 import { Route as DashboardConcursoRouteImport } from './routes/dashboard.concurso'
+import { Route as ApiGeneratePlanRouteImport } from './routes/api/generate-plan'
+import { Route as DashboardPlanosIndexRouteImport } from './routes/dashboard.planos.index'
+import { Route as DashboardPlanosIdRouteImport } from './routes/dashboard.planos.$id'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -55,6 +59,11 @@ const DashboardQuestoesRoute = DashboardQuestoesRouteImport.update({
   path: '/questoes',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardEnviarEditalRoute = DashboardEnviarEditalRouteImport.update({
+  id: '/enviar-edital',
+  path: '/enviar-edital',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardDesempenhoRoute = DashboardDesempenhoRouteImport.update({
   id: '/desempenho',
   path: '/desempenho',
@@ -70,29 +79,52 @@ const DashboardConcursoRoute = DashboardConcursoRouteImport.update({
   path: '/concurso',
   getParentRoute: () => DashboardRoute,
 } as any)
+const ApiGeneratePlanRoute = ApiGeneratePlanRouteImport.update({
+  id: '/api/generate-plan',
+  path: '/api/generate-plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardPlanosIndexRoute = DashboardPlanosIndexRouteImport.update({
+  id: '/planos/',
+  path: '/planos/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardPlanosIdRoute = DashboardPlanosIdRouteImport.update({
+  id: '/planos/$id',
+  path: '/planos/$id',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/api/generate-plan': typeof ApiGeneratePlanRoute
   '/dashboard/concurso': typeof DashboardConcursoRoute
   '/dashboard/cronograma': typeof DashboardCronogramaRoute
   '/dashboard/desempenho': typeof DashboardDesempenhoRoute
+  '/dashboard/enviar-edital': typeof DashboardEnviarEditalRoute
   '/dashboard/questoes': typeof DashboardQuestoesRoute
   '/dashboard/redacao': typeof DashboardRedacaoRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/planos/$id': typeof DashboardPlanosIdRoute
+  '/dashboard/planos/': typeof DashboardPlanosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/api/generate-plan': typeof ApiGeneratePlanRoute
   '/dashboard/concurso': typeof DashboardConcursoRoute
   '/dashboard/cronograma': typeof DashboardCronogramaRoute
   '/dashboard/desempenho': typeof DashboardDesempenhoRoute
+  '/dashboard/enviar-edital': typeof DashboardEnviarEditalRoute
   '/dashboard/questoes': typeof DashboardQuestoesRoute
   '/dashboard/redacao': typeof DashboardRedacaoRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/planos/$id': typeof DashboardPlanosIdRoute
+  '/dashboard/planos': typeof DashboardPlanosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -100,12 +132,16 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/api/generate-plan': typeof ApiGeneratePlanRoute
   '/dashboard/concurso': typeof DashboardConcursoRoute
   '/dashboard/cronograma': typeof DashboardCronogramaRoute
   '/dashboard/desempenho': typeof DashboardDesempenhoRoute
+  '/dashboard/enviar-edital': typeof DashboardEnviarEditalRoute
   '/dashboard/questoes': typeof DashboardQuestoesRoute
   '/dashboard/redacao': typeof DashboardRedacaoRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/planos/$id': typeof DashboardPlanosIdRoute
+  '/dashboard/planos/': typeof DashboardPlanosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -114,35 +150,47 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/signup'
+    | '/api/generate-plan'
     | '/dashboard/concurso'
     | '/dashboard/cronograma'
     | '/dashboard/desempenho'
+    | '/dashboard/enviar-edital'
     | '/dashboard/questoes'
     | '/dashboard/redacao'
     | '/dashboard/'
+    | '/dashboard/planos/$id'
+    | '/dashboard/planos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/signup'
+    | '/api/generate-plan'
     | '/dashboard/concurso'
     | '/dashboard/cronograma'
     | '/dashboard/desempenho'
+    | '/dashboard/enviar-edital'
     | '/dashboard/questoes'
     | '/dashboard/redacao'
     | '/dashboard'
+    | '/dashboard/planos/$id'
+    | '/dashboard/planos'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/login'
     | '/signup'
+    | '/api/generate-plan'
     | '/dashboard/concurso'
     | '/dashboard/cronograma'
     | '/dashboard/desempenho'
+    | '/dashboard/enviar-edital'
     | '/dashboard/questoes'
     | '/dashboard/redacao'
     | '/dashboard/'
+    | '/dashboard/planos/$id'
+    | '/dashboard/planos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -150,6 +198,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
+  ApiGeneratePlanRoute: typeof ApiGeneratePlanRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -203,6 +252,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardQuestoesRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/enviar-edital': {
+      id: '/dashboard/enviar-edital'
+      path: '/enviar-edital'
+      fullPath: '/dashboard/enviar-edital'
+      preLoaderRoute: typeof DashboardEnviarEditalRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/desempenho': {
       id: '/dashboard/desempenho'
       path: '/desempenho'
@@ -224,6 +280,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardConcursoRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/api/generate-plan': {
+      id: '/api/generate-plan'
+      path: '/api/generate-plan'
+      fullPath: '/api/generate-plan'
+      preLoaderRoute: typeof ApiGeneratePlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/planos/': {
+      id: '/dashboard/planos/'
+      path: '/planos'
+      fullPath: '/dashboard/planos/'
+      preLoaderRoute: typeof DashboardPlanosIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/planos/$id': {
+      id: '/dashboard/planos/$id'
+      path: '/planos/$id'
+      fullPath: '/dashboard/planos/$id'
+      preLoaderRoute: typeof DashboardPlanosIdRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
@@ -231,18 +308,24 @@ interface DashboardRouteChildren {
   DashboardConcursoRoute: typeof DashboardConcursoRoute
   DashboardCronogramaRoute: typeof DashboardCronogramaRoute
   DashboardDesempenhoRoute: typeof DashboardDesempenhoRoute
+  DashboardEnviarEditalRoute: typeof DashboardEnviarEditalRoute
   DashboardQuestoesRoute: typeof DashboardQuestoesRoute
   DashboardRedacaoRoute: typeof DashboardRedacaoRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardPlanosIdRoute: typeof DashboardPlanosIdRoute
+  DashboardPlanosIndexRoute: typeof DashboardPlanosIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardConcursoRoute: DashboardConcursoRoute,
   DashboardCronogramaRoute: DashboardCronogramaRoute,
   DashboardDesempenhoRoute: DashboardDesempenhoRoute,
+  DashboardEnviarEditalRoute: DashboardEnviarEditalRoute,
   DashboardQuestoesRoute: DashboardQuestoesRoute,
   DashboardRedacaoRoute: DashboardRedacaoRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardPlanosIdRoute: DashboardPlanosIdRoute,
+  DashboardPlanosIndexRoute: DashboardPlanosIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
@@ -254,16 +337,8 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
+  ApiGeneratePlanRoute: ApiGeneratePlanRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
