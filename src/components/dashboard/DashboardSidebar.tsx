@@ -92,8 +92,8 @@ export function MobileTabBar() {
   const location = useLocation();
   const path = location.pathname;
   return (
-    <nav className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border/60 grid grid-cols-6 px-2 py-2">
-      {items.map((it) => {
+    <nav className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border/60 grid grid-cols-5 px-2 py-2">
+      {items.slice(0, 5).map((it) => {
         const Icon = it.icon;
         const active = it.exact ? path === it.to : path.startsWith(it.to);
         return (
