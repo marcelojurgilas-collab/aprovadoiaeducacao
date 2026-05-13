@@ -8,6 +8,8 @@ import {
   BarChart3,
   LogOut,
   Flame,
+  FileText,
+  Upload,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -15,6 +17,8 @@ type Item = { to: string; label: string; icon: typeof Home; exact?: boolean };
 
 const items: Item[] = [
   { to: "/dashboard", label: "Início", icon: Home, exact: true },
+  { to: "/dashboard/enviar-edital", label: "Enviar edital", icon: Upload },
+  { to: "/dashboard/planos", label: "Meus planos", icon: FileText },
   { to: "/dashboard/concurso", label: "Meu Concurso", icon: Target },
   { to: "/dashboard/cronograma", label: "Cronograma", icon: CalendarDays },
   { to: "/dashboard/questoes", label: "Questões", icon: HelpCircle },
