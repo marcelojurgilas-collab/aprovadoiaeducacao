@@ -8,6 +8,8 @@ import {
   BarChart3,
   LogOut,
   Flame,
+  FileText,
+  Upload,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -15,6 +17,8 @@ type Item = { to: string; label: string; icon: typeof Home; exact?: boolean };
 
 const items: Item[] = [
   { to: "/dashboard", label: "Início", icon: Home, exact: true },
+  { to: "/dashboard/enviar-edital", label: "Enviar edital", icon: Upload },
+  { to: "/dashboard/planos", label: "Meus planos", icon: FileText },
   { to: "/dashboard/concurso", label: "Meu Concurso", icon: Target },
   { to: "/dashboard/cronograma", label: "Cronograma", icon: CalendarDays },
   { to: "/dashboard/questoes", label: "Questões", icon: HelpCircle },
@@ -88,8 +92,8 @@ export function MobileTabBar() {
   const location = useLocation();
   const path = location.pathname;
   return (
-    <nav className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border/60 grid grid-cols-6 px-2 py-2">
-      {items.map((it) => {
+    <nav className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border/60 grid grid-cols-5 px-2 py-2">
+      {items.slice(0, 5).map((it) => {
         const Icon = it.icon;
         const active = it.exact ? path === it.to : path.startsWith(it.to);
         return (
