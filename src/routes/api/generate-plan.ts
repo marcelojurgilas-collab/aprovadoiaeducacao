@@ -76,7 +76,7 @@ const TOOL = {
 export const Route = createFileRoute("/api/generate-plan")({
   server: {
     handlers: {
-      POST: async ({ request }) => {
+      POST: async ({ request }: { request: Request }) => {
         try {
           const body = (await request.json()) as {
             texto?: string;
